@@ -442,16 +442,16 @@ const ChatRoom = ({ onViewGift }) => {
               </Button>
 
               <Form.Control
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      if (!e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                      }
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    if (!e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
                     }
-                  }}
+                  }
+                }}
               />
 
               <Button variant="dark" onClick={sendMessage}>
