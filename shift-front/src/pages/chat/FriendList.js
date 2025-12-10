@@ -130,7 +130,10 @@ const FriendListContent = ({ onSelectFriend, embedded }) => {
         <span className="small text-secondary">친구 {friendInfoList.length}</span>
       </div>
 
-      <ListGroup variant="flush" className="flex-grow-1 overflow-auto">
+      <ListGroup
+        variant="flush"
+        className="flex-grow-1 overflow-auto friend-list-scroll"
+      >
         {friendInfoList.map((friend) => (
           <ListGroup.Item
             key={friend.friendId}

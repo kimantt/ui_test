@@ -1,11 +1,12 @@
 import "../../styles/ChatRoom.css";
 import MessengerBottomNav from "../../components/chat/MessengerBottomNav";
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
 import { ListGroup } from "react-bootstrap";
 import { PROFILE_DEFAULT } from "../../utils/chatImages";
 import { useEffect, useState } from "react";
 import { getMyInfo } from "../../api/userApi";
 
-const ChatMyPage = () => {
+const ChatMyPageContent = ({ embedded }) => {
   const profile_default = PROFILE_DEFAULT;
   const [user, setUser] = useState({
       id: "",
@@ -34,8 +35,14 @@ const ChatMyPage = () => {
   }, []);
   return (
     <div
-      className="bg-white vh-100 mx-auto border-start border-end d-flex flex-column justify-content-center"
-      style={{ maxWidth: "480px" }}
+      className={`bg-white d-flex flex-column justify-content-center ${
+        embedded ? "h-100 w-100" : "vh-100 mx-auto border-start border-end"
+      }`}
+      style={
+        embedded
+          ? { maxWidth: "720px", margin: "0 auto", padding: "32px 0" }
+          : { maxWidth: "480px" }
+      }
     >
       <div className="px-4 py-4 align-items-center ">
         <div className="d-flex align-items-center justify-content-between mb-5">
@@ -68,10 +75,29 @@ const ChatMyPage = () => {
         </ListGroup>
       </div>
       {/* Bottom Navigation*/}
-      <div className="mt-auto"> 
-        <MessengerBottomNav active="chatroom/mypage" />
+      {!embedded && (
+        <div className="mt-auto">
+          <MessengerBottomNav active="chatroom/mypage" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ChatMyPage = (props) => {
+  if (props.embedded) {
+    return <ChatMyPageContent {...props} embedded />;
+  }
+
+  return (
+    <div className="messenger-layout">
+      <MessengerSidebar active="chatroom/mypage" />
+
+      <div className="messenger-column merged-column">
+        <ChatMyPageContent embedded />
       </div>
     </div>
   );
 };
+
 export default ChatMyPage;

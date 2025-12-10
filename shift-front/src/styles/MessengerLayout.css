@@ -76,6 +76,14 @@
   flex: 1;
 }
 
+.messenger-column.merged-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  background: white;
+}
+
 .messenger-placeholder {
   height: 100%;
   display: flex;
@@ -84,4 +92,13 @@
   color: #6b7280;
   background: #fdfdff;
   font-weight: 600;
+}
+
+.friend-list-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.friend-list-scroll::-webkit-scrollbar {
+  display: none;
 }
