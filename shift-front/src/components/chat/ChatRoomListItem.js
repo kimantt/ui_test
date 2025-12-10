@@ -2,7 +2,7 @@ import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent }) => {
+const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent, onSelect }) => {
   const navigate = useNavigate();
 
   // 상대방 이름 정리
@@ -27,17 +27,22 @@ const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent
       key={`${room.chatroomUserId}-${room.chatroomId}`}
       action
       onContextMenu={(e) => menuRef?.current?.openContextMenu(e, room)}
-      onClick={() =>
+      onClick={() => {
+        const payload = {
+          ...room,
+          receiverId,
+          receiverName,
+        };
+
+        if (onSelect) {
+          onSelect(payload);
+          return;
+        }
+
         navigate(`/chatroom/${room.chatroomId}`, {
-          state: {
-            room: {
-              ...room,
-              receiverId,
-              receiverName,
-            },
-          },
-        })
-      }
+          state: { room: payload },
+        });
+      }}
       className="d-flex align-items-center gap-3 border-bottom py-3"
       style={{ cursor: "pointer" }}
     >
