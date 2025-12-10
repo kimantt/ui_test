@@ -53,7 +53,6 @@ const ChatRoom = ({ onViewGift }) => {
   const cleanChatroomName = (name) =>
   name
     ?.replace(/님과의 채팅방$/, "")
-    ?.replace(/님와의 채팅방$/, "")
     ?.replace(/과의 채팅방$/, "")
     ?.replace(/와의 채팅방$/, "")
     ?.trim();
@@ -85,6 +84,10 @@ const ChatRoom = ({ onViewGift }) => {
   useEffect(() => {
     if (!stompReady) return; // 연결 체크
     if (!accessToken) return; // 토큰 유무 체크
+    if (!roomData?.chatroomId) return; // 유효한 채팅방 여부 체크
+
+    // 채팅방 전환 시 기존 메시지 초기화
+    setReceivedMessages([]);
 
     console.log("사용자 ID:", userId);
 
@@ -184,7 +187,7 @@ const ChatRoom = ({ onViewGift }) => {
         });
       }
     };
-  }, [stompReady]);
+  }, [stompReady, accessToken, roomData?.chatroomId]);
 
   const loadHistory = async () => {
     console.log("채팅내역 요청 시작");
@@ -442,16 +445,16 @@ const ChatRoom = ({ onViewGift }) => {
               </Button>
 
               <Form.Control
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    if (!e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      if (!e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
                     }
-                  }
-                }}
+                  }}
               />
 
               <Button variant="dark" onClick={sendMessage}>

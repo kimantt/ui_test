@@ -6,8 +6,10 @@ import { BsArrowLeft, BsX, BsSearch } from "react-icons/bs";
 import { Button, Container, Row, Col, ListGroup, Form, InputGroup } from "react-bootstrap";
 
 import { StompContext } from "../../api/StompProvider";
-import httpClient from "../../api/httpClient";
+import httpClient from '../../api/httpClient';
 import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import NewChatRoom from "./NewChatRoom";
+import { ChatRoomListContent } from "./ChatRoomList";
 import "../../styles/MessengerLayout.css";
 
 const CreateChatRoom = () => {
@@ -18,6 +20,8 @@ const CreateChatRoom = () => {
   const [friendInfoList, setFriendInfoList] = useState([]);
   // 선택된 친구 리스트
   const [selectedFriends, setSelectedFriends] = useState([]);
+  // 새 채팅방 화면
+  const [newChatContext, setNewChatContext] = useState(null);
 
   // 검색어
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -106,11 +110,9 @@ const CreateChatRoom = () => {
         );
 
         // 새 채팅방 페이지로 이동 (아직 채팅방 생성 X)
-        navigate("/chatroom/new", {
-          state: {
-            friend: friendData,
-            roomName: `${friendData.name}님과의 채팅방`,
-          },
+        setNewChatContext({
+          friend: friendData,
+          roomName: `${friendData.name}님과의 채팅방`,
         });
 
       } else {
@@ -144,7 +146,7 @@ const CreateChatRoom = () => {
       }}
     >
       {/* HEADER */}
-      <Row className="p-4 border-bottom">
+      <Row className="p-4 border-bottom m-0">
         <Col className="d-flex align-items-center gap-3">
           <Button variant="light" onClick={() => navigate("/chatroom/list")}>
             <BsArrowLeft size={22} />
@@ -154,13 +156,13 @@ const CreateChatRoom = () => {
       </Row>
 
       {/* SELECTED FRIENDS */}
-      <Row className="px-4 py-2 border-bottom" style={{ minHeight: "112px" }}>
+      <Row className="px-4 py-2 border-bottom m-0" style={{ minHeight: "112px" }}>
         {selectedFriends.length === 0 ? (
           <div
             className="d-flex align-items-center w-100 text-muted"
-            style={{ fontSize: "14px" }}
+            style={{ fontSize: "18px" }}
           >
-            친구를 선택해주세요
+            친구를 선택해주세요.
           </div>
         ) : (
           <div className="d-flex gap-3 overflow-auto friend-list-scroll h-100 align-items-start">
@@ -210,7 +212,7 @@ const CreateChatRoom = () => {
               <BsSearch />
           </InputGroup.Text>
           <Form.Control
-              placeholder="이름, 아이디 (나중에 전화번호도 추가?)"
+              placeholder="이름 혹은 아이디로 친구 검색"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
           />
@@ -275,10 +277,24 @@ const CreateChatRoom = () => {
     <div className="messenger-layout">
       <MessengerSidebar active="chat" />
 
-      <div className="messenger-column list-column">{content}</div>
+      <div className="messenger-column list-column">
+        {newChatContext ? (
+          <ChatRoomListContent embedded />
+        ) : (
+          content
+        )}
+      </div>
 
       <div className="messenger-column detail-column">
-        <div className="messenger-placeholder">채팅방을 선택하면 대화가 표시됩니다.</div>
+        {newChatContext ? (
+          <NewChatRoom
+            key={newChatContext.friend.friendId}
+            friend={newChatContext.friend}
+            roomName={newChatContext.roomName}
+          />
+        ) : (
+          <div className="messenger-placeholder">채팅방을 선택하면 대화가 표시됩니다.</div>
+        )}
       </div>
     </div>
   );

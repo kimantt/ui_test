@@ -18,7 +18,7 @@ import { StompContext } from "../../api/StompProvider";
 import httpClient from "../../api/httpClient";
 import { setCurrentRoomId } from "../../store/chatSlice";
 
-const NewChatRoom = () => {
+const NewChatRoom = ({ friend: friendProp, roomName: roomNameProp }) => {
   const { stompReady } = useContext(StompContext);
 
   const navigate = useNavigate();
@@ -31,8 +31,8 @@ const NewChatRoom = () => {
   const username = accessToken ? jwtDecode(accessToken).name : null;
 
   const roomData = location.state?.room;
-  const friend = location.state?.friend;
-  const roomName = location.state?.roomName;
+  const friend = friendProp || location.state?.friend;
+  const roomName = roomNameProp || location.state?.roomName;
 
   const [inputText, setInputText] = useState("");
   const [showEmoticons, setShowEmoticons] = useState(false);
@@ -113,11 +113,13 @@ const NewChatRoom = () => {
   return (
     <Container
       fluid
-      className="p-0 d-flex flex-column bg-white mx-auto border-start border-end"
-      style={{ maxWidth: "480px", height: "100vh" }}
+      className="p-0 d-flex flex-column h-100 bg-white"
     >
       {/* Header */}
-      <Navbar bg="light" className="px-3 border-bottom d-flex justify-content-between">
+      <Navbar
+        bg="light"
+        className="px-3 border-bottom d-flex align-items-center justify-content-between"
+      >
         <Navbar.Brand className="m-0">
           {roomName}
         </Navbar.Brand>
@@ -127,7 +129,10 @@ const NewChatRoom = () => {
       </Navbar>
 
       {/* Messages */}
-      <div className="flex-grow-1 overflow-auto p-3" style={{ background: "#f7f7f7" }}>
+      <div
+        className="flex-grow-1 overflow-auto p-3"
+        style={{ background: "#f7f7f7" }}
+      >
       </div>
 
       {/* Plus Panel */}

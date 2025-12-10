@@ -8,6 +8,7 @@ const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent
   // 상대방 이름 정리
   const cleanName = (name) =>
     name
+      ?.replace(/님과의 채팅방$/, "")
       ?.replace(/과의 채팅방$/, "")
       ?.replace(/와의 채팅방$/, "")
       ?.trim();
