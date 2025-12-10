@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef  } from "react";
-import { ListGroup, Button, Form } from "react-bootstrap";
+import { ListGroup, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -8,8 +8,10 @@ import { StompContext } from "../../api/StompProvider";
 import httpClient from '../../api/httpClient';
 import FriendListContextMenu from "../../components/chat/FriendListContextMenu";
 import MessengerBottomNav from "../../components/chat/MessengerBottomNav";
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import "../../styles/MessengerLayout.css";
 
-const FriendList = ({onSelectFriend}) => {
+const FriendListContent = ({ onSelectFriend, embedded }) => {
   const { stompReady } = useContext(StompContext);
   const navigate = useNavigate();
 
@@ -74,13 +76,9 @@ const FriendList = ({onSelectFriend}) => {
   };
 
   return (
-    <div
-      className="bg-white vh-100 mx-auto border-start border-end d-flex flex-column"
-      style={{ maxWidth: "480px" }}
-    >
+    <div className={`d-flex flex-column ${embedded ? "h-100" : "vh-100"}`}>
       <FriendListContextMenu ref={menuRef} />
-      {/* Header */}
-      <div className="px-4 py-4 border-bottom">
+      <div className="px-4 py-4 border-bottom bg-white">
         <div className="d-flex align-items-center justify-content-between mb-1">
           <h2 className="fw-bold m-0">친구목록</h2>
           {/* 편집 모드에 따라 다르게 출력 */}
@@ -128,12 +126,10 @@ const FriendList = ({onSelectFriend}) => {
         </div>
       </div>
 
-      {/* Friend Count */}
       <div className="px-4 py-3 bg-light border-bottom">
         <span className="small text-secondary">친구 {friendInfoList.length}</span>
       </div>
 
-      {/* Friend List */}
       <ListGroup variant="flush" className="flex-grow-1 overflow-auto">
         {friendInfoList.map((friend) => (
           <ListGroup.Item
@@ -178,7 +174,7 @@ const FriendList = ({onSelectFriend}) => {
                   marginLeft: "auto",
                   width: "22px",
                   height: "22px",
-                  pointerEvents: "none", // ✔ 클릭 막고 부모만 클릭됨
+                  pointerEvents: "none", // 클릭 막고 부모만 클릭됨
                 }}
               >
                 <input
@@ -197,10 +193,29 @@ const FriendList = ({onSelectFriend}) => {
         ))}
       </ListGroup>
 
-      {/* Bottom Navigation*/}
-      {!onSelectFriend ? (
-        <MessengerBottomNav active="friends" />
-      ) : null}
+      {!embedded && !onSelectFriend ? <MessengerBottomNav active="friends" /> : null}
+    </div>
+  );
+};
+
+const FriendList = (props) => {
+  if (props.embedded) {
+    return <FriendListContent {...props} embedded />;
+  }
+
+  return (
+    <div className="messenger-layout">
+      <MessengerSidebar active="friends" />
+
+      <div className="messenger-column list-column">
+        <FriendListContent {...props} embedded />
+      </div>
+
+      <div className="messenger-column detail-column">
+        <div className="messenger-placeholder">
+          채팅방을 선택하면 대화가 이곳에 표시됩니다.
+        </div>
+      </div>
     </div>
   );
 };

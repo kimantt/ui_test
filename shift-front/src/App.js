@@ -86,9 +86,9 @@ function App() {
 
   return (
     <div>
-      <DevNavigation />
+      {/* <DevNavigation />
 
-      <div style={{ marginTop: "60px" }}>
+      <div style={{ marginTop: "60px" }}> */}
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/friends" element={<FriendList />} />
@@ -154,7 +154,7 @@ function App() {
           <Route path="*" element={<ShopMain />} />
         </Routes>
       </div>
-    </div>
+    // </div>
   );
 }
 
