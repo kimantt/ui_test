@@ -27,6 +27,9 @@ import httpClient from '../../api/httpClient';
 import { setCurrentRoomId } from "../../store/chatSlice";
 import MessageWrapper from "../../components/chat/MessageWrapper";
 import GiftMessageWrapper from "../../components/chat/GiftMessageWrapper";
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import { ChatRoomListContent } from "./ChatRoomList";
+import "../../styles/MessengerLayout.css";
 
 const ChatRoom = ({ onViewGift }) => {
   const { stompClient, stompReady } = useContext(StompContext);
@@ -293,159 +296,152 @@ const ChatRoom = ({ onViewGift }) => {
   }
 
   return (
-    <Container
-      fluid
-      className="p-0 d-flex flex-column bg-white mx-auto border-start border-end"
-      style={{ maxWidth: "480px", height: "100vh", overflow: "hidden" }}
-    >
-      {/* Header */}
-      <Navbar
-        bg="light"
-        className="px-3 border-bottom d-flex align-items-center justify-content-between"
-      >
-        <Navbar.Brand className="m-0">{roomData.chatroomName}</Navbar.Brand>
+    <div className="messenger-layout">
+      <MessengerSidebar active="chat" />
 
-        <Button variant="light" onClick={() => navigate("/chatroom/list")}>
-          <BsXLg />
-        </Button>
-      </Navbar>
-
-      {/* Messages */}
-      <div
-        className="flex-grow-1 overflow-auto p-3 no-scrollbar"
-        style={{ background: "#f7f7f7" }}
-      >
-        <ListGroup variant="flush">
-          {receivedMessages.map((msg) => {
-            return (
-              <ListGroup.Item key={msg.messageId} className="border-0 px-0 bg-transparent">
-              {msg.isGift === "Y" ? (
-                <GiftMessageWrapper msg={msg} userId={userId} onViewGift={onViewGift} time={formatMessageDate(msg.sendDate)} />
-              ) : (
-                <MessageWrapper msg={msg} userId={userId} time={formatMessageDate(msg.sendDate)} />
-              )}
-              </ListGroup.Item>
-            );
-          })}
-          <div ref={bottomScrollRef}></div>
-        </ListGroup>
+      <div className="messenger-column list-column">
+        <ChatRoomListContent embedded />
       </div>
 
-      {/* Plus Panel */}
-      {showPlusPanel && (
-        <div className="border-top bg-white p-3">
-          <Row>
-            <Col>
-              <Button
-                variant="light"
-                className="w-100 py-4 border border-dark"
-                onClick={() => {
-                  // =====================================================================
-                  // ★ 수정 2 — window.SHIFT 저장 + navigate 시 receiverId, receiverName 전달
-                  // =====================================================================
-                  window.SHIFT_RECEIVER_ID = receiverId;
-                  window.SHIFT_RECEIVER_NAME = receiverName;
-                  window.SHIFT_GIFT_FROM_CHAT = true;
-                  window.SHIFT_GIFT_FROM_FRIEND = false;
+      <div className="messenger-column detail-column">
+        <Container fluid className="p-0 d-flex flex-column h-100 bg-white">
+          <Navbar
+            bg="light"
+            className="px-3 border-bottom d-flex align-items-center justify-content-between"
+          >
+            <Navbar.Brand className="m-0">{roomData.chatroomName}</Navbar.Brand>
 
-                  dispatch(setCurrentRoomId(roomData.chatroomId));
+            <Button variant="light" onClick={() => navigate("/chatroom/list")}>
+              <BsXLg />
+            </Button>
+          </Navbar>
 
-                  navigate("/shop", {
-                    state: {
-                      isGift: true,
-                      receiverId,
-                      receiverName,
-                    },
-                  });
-                  // =====================================================================
-                }}
-              >
-                상품 선물
+          <div
+            className="flex-grow-1 overflow-auto p-3 no-scrollbar"
+            style={{ background: "#f7f7f7" }}
+          >
+            <ListGroup variant="flush">
+              {receivedMessages.map((msg) => {
+                return (
+                  <ListGroup.Item key={msg.messageId} className="border-0 px-0 bg-transparent">
+                  {msg.isGift === "Y" ? (
+                    <GiftMessageWrapper msg={msg} userId={userId} onViewGift={onViewGift} time={formatMessageDate(msg.sendDate)} />
+                  ) : (
+                    <MessageWrapper msg={msg} userId={userId} time={formatMessageDate(msg.sendDate)} />
+                  )}
+                  </ListGroup.Item>
+                );
+              })}
+              <div ref={bottomScrollRef}></div>
+            </ListGroup>
+          </div>
+
+          {showPlusPanel && (
+            <div className="border-top bg-white p-3">
+              <Row>
+                <Col>
+                  <Button
+                    variant="light"
+                    className="w-100 py-4 border border-dark"
+                    onClick={() => {
+                      window.SHIFT_RECEIVER_ID = receiverId;
+                      window.SHIFT_RECEIVER_NAME = receiverName;
+                      window.SHIFT_GIFT_FROM_CHAT = true;
+                      window.SHIFT_GIFT_FROM_FRIEND = false;
+
+                      dispatch(setCurrentRoomId(roomData.chatroomId));
+
+                      navigate("/shop", {
+                        state: {
+                          isGift: true,
+                          receiverId,
+                          receiverName,
+                        },
+                      });
+                    }}
+                  >
+                    상품 선물
+                  </Button>
+                </Col>
+
+                <Col>
+                  <Button
+                    variant="light"
+                    className="w-100 py-4 border border-dark"
+                    onClick={() => {
+                      window.SHIFT_RECEIVER_ID = receiverId;
+                      window.SHIFT_RECEIVER_NAME = receiverName;
+                      window.SHIFT_GIFT_FROM_CHAT = true;
+                      window.SHIFT_GIFT_FROM_FRIEND = false;
+
+                      dispatch(setCurrentRoomId(roomData.chatroomId));
+
+                      navigate("/gift-card", {
+                        state: {
+                          isGift: true,
+                          isVoucherOrder: true,
+                          receiverId,
+                          receiverName,
+                        },
+                      });
+                    }}
+                  >
+                    금액권 선물
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          )}
+
+          {showEmoticons && (
+            <div className="border-top bg-white p-3">
+              <Row>
+                {emoticons.map((emo, idx) => (
+                  <Col xs={3} key={idx} className="p-2 text-center">
+                    <Button
+                      variant="light"
+                      className="w-100 p-3 border"
+                      onClick={() => handleEmoticonSelect(emo)}
+                    >
+                      <span style={{ fontSize: "24px" }}>{emo}</span>
+                    </Button>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )}
+
+          <div className="border-top bg-white p-3">
+            <InputGroup>
+              <Button variant="outline-secondary" onClick={handlePlusClick}>
+                <BsPlusLg />
               </Button>
-            </Col>
 
-            <Col>
-              <Button
-                variant="light"
-                className="w-100 py-4 border border-dark"
-                onClick={() => {
-                  // =====================================================================
-                  // ★ 금액권 선물도 동일하게 처리
-                  // =====================================================================
-                  window.SHIFT_RECEIVER_ID = receiverId;
-                  window.SHIFT_RECEIVER_NAME = receiverName;
-                  window.SHIFT_GIFT_FROM_CHAT = true;
-                  window.SHIFT_GIFT_FROM_FRIEND = false;
-
-                  dispatch(setCurrentRoomId(roomData.chatroomId));
-
-                  navigate("/gift-card", {
-                    state: {
-                      isGift: true,
-                      isVoucherOrder: true,
-                      receiverId,
-                      receiverName,
-                    },
-                  });
-                  // =====================================================================
-                }}
-              >
-                금액권 선물
+              <Button variant="outline-secondary" onClick={handleSmileClick}>
+                <BsEmojiSmile />
               </Button>
-            </Col>
-          </Row>
-        </div>
-      )}
 
-      {/* Emoticon Panel */}
-      {showEmoticons && (
-        <div className="border-top bg-white p-3">
-          <Row>
-            {emoticons.map((emo, idx) => (
-              <Col xs={3} key={idx} className="p-2 text-center">
-                <Button
-                  variant="light"
-                  className="w-100 p-3 border"
-                  onClick={() => handleEmoticonSelect(emo)}
-                >
-                  <span style={{ fontSize: "24px" }}>{emo}</span>
-                </Button>
-              </Col>
-            ))}
-          </Row>
-        </div>
-      )}
+              <Form.Control
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    if (!e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }
+                }}
+              />
 
-      {/* Input */}
-      <div className="border-top bg-white p-3">
-        <InputGroup>
-          <Button variant="outline-secondary" onClick={handlePlusClick}>
-            <BsPlusLg />
-          </Button>
-
-          <Button variant="outline-secondary" onClick={handleSmileClick}>
-            <BsEmojiSmile />
-          </Button>
-
-          <Form.Control
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                if (!e.shiftKey) {
-                  e.preventDefault(); // 줄바꿈 방지
-                  sendMessage();
-                }
-              }
-            }}
-          />
-
-          <Button variant="dark" onClick={sendMessage}>
-            <BsFillSendFill />
-          </Button>
-        </InputGroup>
+              <Button variant="dark" onClick={sendMessage}>
+                <BsFillSendFill />
+              </Button>
+            </InputGroup>
+          </div>
+        </Container>
       </div>
-    </Container>
+    </div>
   );
 };
 
