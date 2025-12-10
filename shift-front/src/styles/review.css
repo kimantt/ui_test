@@ -1,0 +1,159 @@
+/* 🔹 리뷰 전체 섹션 */
+.review-section {
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 🔹 상단 영역 (리뷰(12) + 평균별점 + 정렬) */
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.review-title {
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avg-rating-box {
+  display: flex;
+  align-items: center;
+}
+
+/* 🔹 정렬 셀렉트 */
+.review-sort {
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* 🔹 별점 */
+.star-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  color: #ddd;
+}
+
+.star.active {
+  color: #FFD700;
+}
+
+.star-number {
+  margin-left: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.star.half {
+  position: relative;
+  color: #ddd; /* 빈 별 색 */
+
+}
+
+.star.half::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #FFD700; /* 반쪽은 골드 */
+}
+
+/* 🔹 리뷰 없을 때 */
+.no-review-text {
+  color: #888;
+  font-size: 14px;
+}
+
+/* 🔹 리뷰 카드 */
+.review-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  padding: 15px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.review-user {
+  font-size: 13px;
+  color: #888;
+}
+
+/* 🔹 리뷰 내용 */
+.review-content {
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* 🔹 더보기/접기 */
+.review-toggle {
+  font-size: 13px;
+  color: #007bff;
+  cursor: pointer;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+/* 🔹 작성일 */
+.review-date {
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ============================================
+   🔥 추가: 리뷰 더보기 버튼 (세련된 스타일)
+============================================ */
+
+/* 버튼 컨테이너 */
+.review-more-container {
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* 더보기 버튼 */
+.review-more-btn {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 10px 22px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.review-more-btn:hover {
+  background: #fff;
+  border-color: #bbb;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.review-more-btn:active {
+  background: #f0f0f0;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+}

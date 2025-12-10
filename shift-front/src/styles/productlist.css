@@ -1,0 +1,60 @@
+/* ============================
+   상단 타이틀 + 정렬 영역
+   ============================ */
+.productlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* ============================
+   정렬 셀렉트박스
+   ============================ */
+.productlist-sort {
+  width: 180px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  transition: 0.25s;
+}
+
+.productlist-sort:hover,
+.productlist-sort:focus {
+  border-color: #a7d0ff;
+  box-shadow: 0 0 0 3px rgba(167, 208, 255, 0.3);
+}
+
+
+/* ============================
+   페이지네이션
+   ============================ */
+
+.productlist-pagination .page-item .page-link {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  transition: 0.25s;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+/* hover */
+.productlist-pagination .page-item .page-link:hover {
+  background-color: #a7d0ff;
+  color: #fff;
+  border-color: #a7d0ff;
+}
+
+/* active */
+.productlist-pagination .page-item.active .page-link {
+  background-color: #a7d0ff;
+  color: #fff;
+  border-color: #a7d0ff;
+}
+
+/* disabled */
+.productlist-pagination .page-item.disabled .page-link {
+  background-color: #f0f0f0;
+  color: #aaa;
+}

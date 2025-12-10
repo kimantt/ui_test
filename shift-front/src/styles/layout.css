@@ -1,0 +1,32 @@
+.layout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+.layout-main {
+  width: 100%;
+  margin: 0 auto;
+  flex-grow: 1;
+
+  padding-bottom: 120px;
+}
+
+.fixed-bottom-wrapper {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #e5e5e5;
+  padding: 12px 0;
+  z-index: 999;
+}
+
+/**/
+
+/**/
+
+/**/
+
+/**/

@@ -1,0 +1,53 @@
+.order-item-card {
+  background: #f8f9fa;
+  border: none;
+  padding: 16px;
+}
+
+.order-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-item-title {
+  font-weight: bold;
+}
+
+.order-item-qty {
+  color: #888;
+}
+
+.order-item-price {
+  font-weight: bold;
+}
+
+.cart-container {
+  padding-bottom: 120px;
+}
+
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 하단 결제 버튼 */
+.cart-buy-btn {
+  width: 100%;
+  padding: 14px 0;
+  background: #000;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+/**/
+
+/**/
+
+/**/
+
+/**/

@@ -1,0 +1,43 @@
+/* 제목 + 뒤로가기 */
+.review-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* 섹션 제목 */
+.review-form-title {
+  font-weight: 600;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+/* 상품명 */
+.review-form-product {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+/* 별점 */
+.review-form-stars span {
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 28px;
+}
+
+/* 내용 카운터 */
+.review-form-counter {
+  text-align: right;
+  color: #6c757d;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* 버튼 */
+.review-form-submit {
+  width: 100%;
+  padding: 12px;
+  font-weight: bold;
+}

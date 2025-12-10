@@ -1,0 +1,70 @@
+.shop-footer {
+  border-top: 1px solid #e5e5e5;
+  background-color: #f1f3f5; /* 연한 회색 */
+  padding: 40px 0 30px 0;
+  margin-top: 40px;
+}
+
+.footer-container {
+  max-width: 1000px;
+}
+
+.footer-info {
+  color: #6c757d; /* text-muted */
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.footer-info a {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.footer-info a:hover {
+  text-decoration: underline;
+}
+
+.footer-copy {
+  color: #6c757d;
+  font-size: 13px;
+  border-top: 1px solid #dee2e6;
+  padding-top: 12px;
+}
+
+/* TOP 버튼을 푸터 내부 느낌으로 자연스럽게 */
+.footer-top-btn {
+  display: inline-block;
+  margin: 0 auto 30px auto;
+  padding: 10px 32px;
+  background: #f1f3f5;
+  color: #111;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+  text-align: center;
+
+  /* 중앙 정렬 */
+  display: flex;
+  justify-content: center;
+}
+
+.footer-top-btn:hover {
+  background: #a7d0ff;
+}
+
+.footer-info {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}

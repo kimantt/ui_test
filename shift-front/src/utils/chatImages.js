@@ -1,0 +1,1 @@
+export const PROFILE_DEFAULT = "/images/profile_default.png";

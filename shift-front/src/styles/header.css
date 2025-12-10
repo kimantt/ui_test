@@ -1,0 +1,90 @@
+/* ============================
+   카테고리 탭 기본 스타일
+   ============================ */
+.category-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;  /* 4등분 정렬 */
+  padding: 0 40px;
+}
+
+.category-nav .category-item {
+  color: #333;                 /* 기본 텍스트 색 */
+  font-weight: 500;
+  padding-bottom: 6px;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s;
+  border-bottom: 2px solid transparent;
+}
+
+/* ============================
+   Hover → 포인트컬러
+   ============================ */
+.category-nav .category-item:hover {
+  color: #a7d0ff !important;
+  border-bottom: 2px solid #a7d0ff;
+}
+
+/* ============================
+   Active(선택된 카테고리) 지원
+   ============================ */
+.category-nav .category-item.active {
+  color: #a7d0ff !important;
+  border-bottom: 2px solid #a7d0ff;
+  font-weight: 600;
+}
+
+.header-container {
+  max-width: 1000px;
+}
+
+.header-top {
+  background: #fff;
+}
+
+/* 검색 */
+.search-icon {
+  background: #f1f3f5;
+  border-right: 0;
+}
+
+.search-input {
+  background: #f1f3f5;
+  border-left: 0;
+}
+
+/* 카테고리 */
+.category-bar {
+  background: #000;
+  padding: 10px 0;
+}
+
+.category-nav a {
+  color: #fff !important;
+  font-weight: 500;
+  padding: 0;
+}
+
+/* Active/hovers는 필요 시 추가 */
+.category-item:hover {
+  opacity: 0.8;
+}
+
+.back-header-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.back-header-title {
+  margin: 0;
+  font-weight: bold;
+}
+
+.search-highlight {
+  color: #a7d0ff;  /* 원하는 포인트 컬러 */
+  font-weight: 700;
+}
