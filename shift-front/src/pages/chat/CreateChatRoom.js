@@ -6,7 +6,9 @@ import { BsArrowLeft, BsX, BsSearch } from "react-icons/bs";
 import { Button, Container, Row, Col, ListGroup, Form, InputGroup } from "react-bootstrap";
 
 import { StompContext } from "../../api/StompProvider";
-import httpClient from '../../api/httpClient';
+import httpClient from "../../api/httpClient";
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import "../../styles/MessengerLayout.css";
 
 const CreateChatRoom = () => {
   const { stompReady } = useContext(StompContext);
@@ -133,15 +135,11 @@ const CreateChatRoom = () => {
     );
   });
 
-  return (
+  const content = (
     <Container
       fluid
-      className="d-flex flex-column"
+      className="p-0 d-flex flex-column h-100"
       style={{
-        height: "100vh",
-        maxWidth: "480px",
-        borderLeft: "1px solid #ddd",
-        borderRight: "1px solid #ddd",
         backgroundColor: "#fff",
       }}
     >
@@ -156,9 +154,16 @@ const CreateChatRoom = () => {
       </Row>
 
       {/* SELECTED FRIENDS */}
-      {selectedFriends.length > 0 && (
-        <Row className="px-4 py-2 border-bottom">
-          <div className="d-flex gap-3 overflow-auto">
+      <Row className="px-4 py-2 border-bottom" style={{ minHeight: "112px" }}>
+        {selectedFriends.length === 0 ? (
+          <div
+            className="d-flex align-items-center w-100 text-muted"
+            style={{ fontSize: "14px" }}
+          >
+            친구를 선택해주세요
+          </div>
+        ) : (
+          <div className="d-flex gap-3 overflow-auto friend-list-scroll h-100 align-items-start">
             {selectedFriendsList.map((friend) => (
               <div key={friend.friendId} className="text-center" style={{ paddingTop: "8px" }}>
                 <div className="position-relative d-inline-block mb-2">
@@ -195,8 +200,8 @@ const CreateChatRoom = () => {
               </div>
             ))}
           </div>
-        </Row>
-      )}
+        )}
+      </Row>
 
       {/* Search Section */}
       <div className="border-bottom p-4">
@@ -213,12 +218,14 @@ const CreateChatRoom = () => {
       </div>
 
       {/* FRIEND LIST */}
-      <div className="flex-grow-1 overflow-auto">
+      <div className="flex-grow-1 overflow-auto friend-list-scroll">
         <ListGroup variant="flush">
           {filteredFriends.map((friend) => (
             <ListGroup.Item
               key={friend.friendId}
               className="d-flex align-items-center py-3 border-bottom"
+              onClick={() => handleToggleFriend(friend.friendId)}
+              action
             >
               {/* Profile Icon */}
               <div
@@ -241,8 +248,9 @@ const CreateChatRoom = () => {
               <Form.Check
                 type="checkbox"
                 checked={selectedFriends.includes(friend.friendId)}
-                onChange={() => handleToggleFriend(friend.friendId)}
-                style={{ transform: "scale(1.3)" }}
+                readOnly
+                style={{ transform: "scale(1.3)", pointerEvents: "none" }}
+                tabIndex={-1}
               />
             </ListGroup.Item>
           ))}
@@ -261,6 +269,18 @@ const CreateChatRoom = () => {
         </Button>
       </Row>
     </Container>
+  );
+
+  return (
+    <div className="messenger-layout">
+      <MessengerSidebar active="chat" />
+
+      <div className="messenger-column list-column">{content}</div>
+
+      <div className="messenger-column detail-column">
+        <div className="messenger-placeholder">채팅방을 선택하면 대화가 표시됩니다.</div>
+      </div>
+    </div>
   );
 };
 
