@@ -84,6 +84,22 @@
   background: white;
 }
 
+.messenger-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e6e8ee;
+}
+
+.messenger-header .messenger-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
 .messenger-placeholder {
   height: 100%;
   display: flex;

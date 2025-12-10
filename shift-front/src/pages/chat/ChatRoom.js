@@ -6,12 +6,10 @@ import {
   Container,
   Row,
   Col,
-  Navbar,
   ListGroup,
   Button,
   InputGroup,
   Form,
-  Card,
 } from "react-bootstrap";
 
 import {
@@ -311,16 +309,13 @@ const ChatRoom = ({ onViewGift }) => {
 
       <div className="messenger-column detail-column">
         <Container fluid className="p-0 d-flex flex-column h-100 bg-white">
-          <Navbar
-            bg="light"
-            className="px-3 border-bottom d-flex align-items-center justify-content-between"
-          >
-            <Navbar.Brand className="m-0">{roomData.chatroomName}</Navbar.Brand>
+          <div className="messenger-header w-100">
+            <h2 className="messenger-title mb-0">{roomData.chatroomName}</h2>
 
-            <Button variant="light" onClick={() => navigate("/chatroom/list")}>
+            <Button variant="light" className="ms-auto" onClick={() => navigate("/chatroom/list")}>
               <BsXLg />
             </Button>
-          </Navbar>
+          </div>
 
           <div
             className="flex-grow-1 overflow-auto p-3 no-scrollbar"

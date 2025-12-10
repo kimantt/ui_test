@@ -78,52 +78,52 @@ const FriendListContent = ({ onSelectFriend, embedded }) => {
   return (
     <div className={`d-flex flex-column ${embedded ? "h-100" : "vh-100"}`}>
       <FriendListContextMenu ref={menuRef} />
-      <div className="px-4 py-4 border-bottom bg-white">
-        <div className="d-flex align-items-center justify-content-between mb-1">
-          <h2 className="fw-bold m-0">친구목록</h2>
-          {/* 편집 모드에 따라 다르게 출력 */}
-          {!onSelectFriend ? (
-            !editMode ? (
-              <div className="d-flex gap-2">
-                <Button
-                  variant="link"
-                  className="text-secondary text-decoration-none p-0 small"
-                  onClick={() => setEditMode(true)}
-                >
-                  편집
-                </Button>
-                <Button
-                  variant="link"
-                  className="text-secondary text-decoration-none p-0 small"
-                  onClick={() => navigate("/userSearch")}
-                >
-                  친구 추가
-                </Button>
-              </div>
-            ) : (
-              <div className="d-flex gap-2">
-                <Button
-                  variant="link"
-                  className="text-secondary text-decoration-none p-0 small"
-                  onClick={() => {
-                    setEditMode(false);
-                    setSelectedFriends([]);
-                  }}
-                >
-                  취소
-                </Button>
-  
-                <Button
-                  variant="link"
-                  className="text-danger text-decoration-none p-0 small"
-                  onClick={deleteSelectedFriends}
-                >
-                  삭제
-                </Button>
-              </div>
-            )
-          ) : null}
-        </div>
+      <div className="messenger-header w-100">
+        <h2 className="messenger-title mb-0">친구목록</h2>
+        {/* 편집 모드에 따라 다르게 출력 */}
+        {!onSelectFriend ? (
+          <div className="d-flex gap-2 ms-auto">
+            {!editMode ? (
+              <>
+              <Button
+                variant="link"
+                className="text-secondary text-decoration-none p-0 small"
+                onClick={() => setEditMode(true)}
+              >
+                편집
+              </Button>
+              <Button
+                variant="link"
+                className="text-secondary text-decoration-none p-0 small"
+                onClick={() => navigate("/userSearch")}
+              >
+                친구 추가
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="link"
+                className="text-secondary text-decoration-none p-0 small"
+                onClick={() => {
+                  setEditMode(false);
+                  setSelectedFriends([]);
+                }}
+              >
+                취소
+              </Button>
+
+              <Button
+                variant="link"
+                className="text-danger text-decoration-none p-0 small"
+                onClick={deleteSelectedFriends}
+              >
+                삭제
+              </Button>
+            </>
+            )}
+          </div>
+        ) : null}
       </div>
 
       <div className="px-4 py-3 bg-light border-bottom">

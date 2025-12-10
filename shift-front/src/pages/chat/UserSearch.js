@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsSearch, BsX } from "react-icons/bs";
-import { Button, Row, Col, Form, ListGroup } from "react-bootstrap";
+import { Button, Row, Form, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -65,14 +65,12 @@ const UserSearchContent = ({ embedded }) => {
   return (
     <div className={`d-flex flex-column bg-white ${embedded ? "h-100" : "vh-100"}`}>
       {/* Header */}
-      <Row className="p-4 border-bottom m-0">
-        <Col className="d-flex justify-content-between align-items-center">
-          <h2 className="fw-bold m-0">친구 추가</h2>
-          <Button variant="light" onClick={() => navigate("/friends")}> 
-            <BsX size={24} />
-          </Button>
-        </Col>
-      </Row>
+      <div className="messenger-header w-100">
+        <h2 className="messenger-title mb-0">친구 추가</h2>
+        <Button variant="light" className="ms-auto" onClick={() => navigate("/friends")}> 
+          <BsX size={24} />
+        </Button>
+      </div>
 
       {/* Search Bar */}
       <Row className="px-4 py-3 border-bottom m-0">

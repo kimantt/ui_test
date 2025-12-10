@@ -4,7 +4,6 @@ import {
   Form,
   Button,
   ListGroup,
-  Navbar,
   InputGroup,
 } from "react-bootstrap";
 import { BsSearch, BsPlusLg } from "react-icons/bs";
@@ -198,13 +197,17 @@ const ChatRoomListContent = ({ embedded }) => {
       <ChatRoomListContextMenu rooms={rooms} setRooms={setRooms} ref={menuRef} />
 
       {/* Header */}
-      <Navbar bg="light" className="border-bottom px-4 py-3">
-        <Navbar.Brand className="fw-bold">채팅목록</Navbar.Brand>
+      <div className="messenger-header w-100">
+        <h2 className="messenger-title mb-0">채팅목록</h2>
 
-        <Button variant="light" className="ms-auto" onClick={() => navigate("/chatroom/create")}>
+        <Button
+          variant="light"
+          className="ms-auto"
+          onClick={() => navigate("/chatroom/create")}
+        >
           <BsPlusLg size={20} />
         </Button>
-      </Navbar>
+      </div>
 
       {/* Search */}
       <div className="border-bottom p-4">

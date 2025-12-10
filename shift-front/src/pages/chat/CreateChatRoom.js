@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { BsArrowLeft, BsX, BsSearch } from "react-icons/bs";
-import { Button, Container, Row, Col, ListGroup, Form, InputGroup } from "react-bootstrap";
+import { Button, Container, Row, ListGroup, Form, InputGroup } from "react-bootstrap";
 
 import { StompContext } from "../../api/StompProvider";
 import httpClient from '../../api/httpClient';
@@ -146,14 +146,12 @@ const CreateChatRoom = () => {
       }}
     >
       {/* HEADER */}
-      <Row className="p-4 border-bottom m-0">
-        <Col className="d-flex align-items-center gap-3">
-          <Button variant="light" onClick={() => navigate("/chatroom/list")}>
-            <BsArrowLeft size={22} />
-          </Button>
-          <h3 className="m-0">채팅방 생성</h3>
-        </Col>
-      </Row>
+      <div className="messenger-header w-100">
+        <Button variant="light" onClick={() => navigate("/chatroom/list")}> 
+          <BsArrowLeft size={22} />
+        </Button>
+        <h2 className="messenger-title mb-0">채팅방 생성</h2>
+      </div>
 
       {/* SELECTED FRIENDS */}
       <Row className="px-4 py-2 border-bottom m-0" style={{ minHeight: "112px" }}>
