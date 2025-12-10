@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { BsSearch, BsX } from 'react-icons/bs';
-import { Button, Container, Row, Col, Form, ListGroup } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { BsSearch, BsX } from "react-icons/bs";
+import { Button, Row, Col, Form, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 
 import httpClient from '../../api/httpClient';
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import "../../styles/MessengerLayout.css";
 
-const UserSearch = () => {
+const UserSearchContent = ({ embedded }) => {
   const navigate = useNavigate();
 
   const [searchPhoneNumber, setSearchPhoneNumber] = useState(''); // 검색어
@@ -61,29 +63,19 @@ const UserSearch = () => {
   }, [searchPhoneNumber]);
 
   return (
-    <Container
-      fluid
-      className="d-flex flex-column"
-      style={{
-        height: '100vh',
-        maxWidth: '480px',
-        borderLeft: '1px solid #ddd',
-        borderRight: '1px solid #ddd',
-        backgroundColor: '#fff',
-      }}
-    >
+    <div className={`d-flex flex-column bg-white ${embedded ? "h-100" : "vh-100"}`}>
       {/* Header */}
-      <Row className="p-4 border-bottom">
+      <Row className="p-4 border-bottom m-0">
         <Col className="d-flex justify-content-between align-items-center">
           <h2 className="fw-bold m-0">친구 추가</h2>
-          <Button variant="light" onClick={() => navigate("/friends")}>
+          <Button variant="light" onClick={() => navigate("/friends")}> 
             <BsX size={24} />
           </Button>
         </Col>
       </Row>
 
       {/* Search Bar */}
-      <Row className="px-4 py-3 border-bottom">
+      <Row className="px-4 py-3 border-bottom m-0">
         <div className="position-relative">
           <BsSearch
             size={18}
@@ -168,7 +160,29 @@ const UserSearch = () => {
           )
         )}
       </div>
-    </Container>
+    </div>
+  );
+};
+
+const UserSearch = (props) => {
+  if (props.embedded) {
+    return <UserSearchContent {...props} embedded />;
+  }
+
+  return (
+    <div className="messenger-layout">
+      <MessengerSidebar active="friends" />
+
+      <div className="messenger-column list-column">
+        <UserSearchContent {...props} embedded />
+      </div>
+
+      <div className="messenger-column detail-column">
+        <div className="messenger-placeholder">
+          채팅방을 선택하면 대화가 이곳에 표시됩니다.
+        </div>
+      </div>
+    </div>
   );
 };
 
