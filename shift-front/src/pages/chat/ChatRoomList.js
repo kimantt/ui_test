@@ -18,8 +18,10 @@ import ChatRoomListContextMenu from "../../components/chat/ChatRoomListContextMe
 import MessengerBottomNav from "../../components/chat/MessengerBottomNav";
 import { setRooms as setReduxRooms } from "../../store/chatSlice";
 import ChatRoomListItem from "../../components/chat/ChatRoomListItem";
+import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import "../../styles/MessengerLayout.css";
 
-const ChatRoomList = () => {
+const ChatRoomListContent = ({ embedded }) => {
   const { stompReady } = useContext(StompContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -190,8 +192,8 @@ const ChatRoomList = () => {
   return (
     <Container
       fluid
-      className="p-0 bg-white mx-auto border-start border-end d-flex flex-column"
-      style={{ maxWidth: "480px", height: "100vh", overflow: "hidden" }}
+      className={`p-0 bg-white d-flex flex-column ${embedded ? "h-100" : ""}`}
+      style={{ height: embedded ? "100%" : "100vh", overflow: "hidden" }}
     >
       <ChatRoomListContextMenu rooms={rooms} setRooms={setRooms} ref={menuRef} />
 
@@ -283,9 +285,26 @@ const ChatRoomList = () => {
       </div>
 
       {/* Bottom Navigation*/}
-      <MessengerBottomNav active="chat" />
+      {!embedded && <MessengerBottomNav active="chat" />}
     </Container>
   );
 };
 
+const ChatRoomList = () => {
+  return (
+    <div className="messenger-layout">
+      <MessengerSidebar active="chat" />
+
+      <div className="messenger-column list-column">
+        <ChatRoomListContent embedded />
+      </div>
+
+      <div className="messenger-column detail-column">
+        <div className="messenger-placeholder">채팅방을 선택하면 대화가 표시됩니다.</div>
+      </div>
+    </div>
+  );
+};
+
+export { ChatRoomListContent };
 export default ChatRoomList;
