@@ -153,8 +153,8 @@ function App() {
           {/* 404: 잘못된 경로 → 홈으로 */}
           <Route path="*" element={<ShopMain />} />
         </Routes>
-      </div>
-    // </div>
+      {/* </div> */}
+    </div>
   );
 }
 

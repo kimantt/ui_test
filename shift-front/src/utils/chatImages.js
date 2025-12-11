@@ -1,1 +1,1 @@
-export const PROFILE_DEFAULT = "/images/profile_default.png";
+export const PROFILE_DEFAULT = "https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/profile_default.png";

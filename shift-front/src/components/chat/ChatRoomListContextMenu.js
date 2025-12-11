@@ -1,4 +1,10 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useRef,
+} from "react";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
@@ -15,6 +21,7 @@ const ChatRoomListContextMenu = forwardRef(({ rooms, setRooms }, ref) => {
 
   const [editingRoom, setEditingRoom] = useState(null);
   const [newRoomName, setNewRoomName] = useState("");
+  const menuRef = useRef(null);
 
   // 부모가 사용할 메서드
   useImperativeHandle(ref, () => ({
@@ -29,6 +36,29 @@ const ChatRoomListContextMenu = forwardRef(({ rooms, setRooms }, ref) => {
       });
     },
   }));
+
+  // 컨텍스트 메뉴가 열린 상태에서 바깥 영역 클릭이나 스크롤 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (contextMenu && menuRef.current && !menuRef.current.contains(e.target)) {
+        setContextMenu(null);
+      }
+    };
+
+    const handleScroll = () => {
+      if (contextMenu) {
+        setContextMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [contextMenu]);
 
   // 채팅방 이름 저장
   const saveRoomName = () => {
@@ -68,6 +98,7 @@ const ChatRoomListContextMenu = forwardRef(({ rooms, setRooms }, ref) => {
       {contextMenu && (
         <div
           className="position-fixed bg-white border shadow"
+          ref={menuRef}
           style={{
             top: contextMenu.y,
             left: contextMenu.x,

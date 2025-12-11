@@ -36,7 +36,7 @@ const ChatRoomListContent = ({ embedded }) => {
 
 
   // 채팅방 목록 가져오기
-  const getChatRoomList = async (userId) => {
+  const getChatRoomList = async () => {
     try {
       const userChatRoomInfo = await httpClient.get(
         `http://localhost:8080/chatrooms`

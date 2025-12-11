@@ -150,9 +150,7 @@ const ChatRoom = ({ onViewGift }) => {
       body: JSON.stringify(joinMessage),
     });
 
-    // 언마운트 시 구독 해제
-    return () => {
-      chatSub && chatSub.unsubscribe();
+    const sendLeaveMessage = () => {
 
       console.log("퇴장 chatroomUsersId:", roomData.chatroomUserId);
 
@@ -184,6 +182,23 @@ const ChatRoom = ({ onViewGift }) => {
           body: JSON.stringify(leaveMessage),
         });
       }
+    };
+
+    const handleBeforeUnload = () => {
+      sendLeaveMessage();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // 언마운트 시 구독 해제
+    return () => {
+      chatSub && chatSub.unsubscribe();
+
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
+      console.log("퇴장 chatroomUsersId:", roomData.chatroomUserId);
+
+      sendLeaveMessage();
     };
   }, [stompReady, accessToken, roomData?.chatroomId]);
 

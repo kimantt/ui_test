@@ -1,6 +1,12 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useRef,
+} from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const FriendListContextMenu = forwardRef((props, ref) => {
   const navigate = useNavigate();
@@ -8,6 +14,7 @@ const FriendListContextMenu = forwardRef((props, ref) => {
   const [contextMenu, setContextMenu] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [targetFriend, setTargetFriend] = useState(null);
+  const menuRef = useRef(null);
 
   // 부모에서 openContextMenu 호출 가능하도록 제공
   useImperativeHandle(ref, () => ({
@@ -22,6 +29,29 @@ const FriendListContextMenu = forwardRef((props, ref) => {
       });
     },
   }));
+
+  // 컨텍스트 메뉴가 열린 상태에서 바깥 영역 클릭이나 스크롤 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (contextMenu && menuRef.current && !menuRef.current.contains(e.target)) {
+        setContextMenu(null);
+      }
+    };
+
+    const handleScroll = () => {
+      if (contextMenu) {
+        setContextMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [contextMenu]);
 
   // 방 생성 버튼 실행
   const createChatRoom = () => {
@@ -39,6 +69,7 @@ const FriendListContextMenu = forwardRef((props, ref) => {
       {contextMenu && (
         <div
           className="position-fixed bg-white border shadow"
+          ref={menuRef}
           style={{
             top: contextMenu.y,
             left: contextMenu.x,
