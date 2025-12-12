@@ -17,20 +17,23 @@ const MessengerSidebar = ({ active }) => {
   };
 
   const navItems = [
-    { key: "friends", label: "친구 목록", path: "/friends" },
+    { key: "friends", label: "친구", path: "/friends" },
     { key: "chat", label: "채팅방", path: "/chatroom/list", badge: totalUnread },
     { key: "shop", label: "쇼핑", path: "/shop" },
-    { key: "chatroom/mypage", label: "MY", path: "/chatroom/mypage" },
+    { key: "chatroom/mypage", label: "내 프로필", path: "/chatroom/mypage" },
   ];
 
   return (
     <aside className="messenger-sidebar shadow-sm">
-      <div>
-        <div className="sidebar-title mb-2">My Messenger</div>
-        <p className="mb-0 text-white-50 small">메신저 메뉴</p>
+      <div className="sidebar-header">
+        <img
+          src="https://shift-main-images.s3.ap-northeast-3.amazonaws.com/logo/shift_main_logo.png"
+          alt="Shift Messenger"
+          className="sidebar-logo"
+        />
       </div>
 
-      <div className="d-flex flex-column gap-2">
+      <div className="d-flex flex-column gap-2  nav-list">
         {navItems.map((item) => (
           <button
             key={item.key}

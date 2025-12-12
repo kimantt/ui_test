@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 
 import httpClient from '../../api/httpClient';
 import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import { PROFILE_DEFAULT } from "../../utils/chatImages";
 import "../../styles/MessengerLayout.css";
 
 const UserSearchContent = ({ embedded }) => {
@@ -123,18 +124,13 @@ const UserSearchContent = ({ embedded }) => {
             <ListGroup variant="flush">
                 <ListGroup.Item key={searchResults.userId} className="d-flex align-items-center py-3 border-bottom">
                   {/* 프로필 */}
-
-                  <div
-                    className="d-flex justify-content-center align-items-center"
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '50%',
-                      border: '2px solid black',
-                    }}
-                  >
-                    <strong>{searchResults.name[0]}</strong>
-                  </div>
+                  <img
+                    src={`https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${searchResults.userId}.png`}
+                    onError={(e) => (e.currentTarget.src = PROFILE_DEFAULT)}
+                    alt={`${searchResults.name} 프로필 사진`}
+                    className="rounded-circle border border-2 border-dark flex-shrink-0"
+                    style={{ width: "48px", height: "48px" }}
+                  />
 
                   {/* 이름 */}
                   <div className="flex-grow-1 ms-3">

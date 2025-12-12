@@ -233,7 +233,10 @@ const ChatRoomListContent = ({ embedded }) => {
       </div>
 
       {/* Chat List */}
-      <div className="flex-grow-1 overflow-auto" style={{ paddingBottom: "80px" }}>
+      <div
+        className="flex-grow-1 overflow-auto no-scrollbar"
+        style={{ paddingBottom: "80px" }}
+      >
         <div style={{ display: searchMode ? "block" : "none" }}>
           {/* 채팅방 이름 검색 결과 */}
           <h6 className="px-3 pt-3 fw-bold text-secondary">채팅방</h6>

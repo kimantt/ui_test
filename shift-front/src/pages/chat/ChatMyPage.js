@@ -2,11 +2,12 @@ import "../../styles/ChatRoom.css";
 import "../../styles/ChatMyPage.css";
 import MessengerBottomNav from "../../components/chat/MessengerBottomNav";
 import MessengerSidebar from "../../components/chat/MessengerSidebar";
-import { Modal, Button, Form, ListGroup } from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
 import { PROFILE_DEFAULT } from "../../utils/chatImages";
 import { useEffect, useState } from "react";
 import { getMyInfo } from "../../api/userApi";
 import { uploadProfileImage } from "../../api/userProfileImage";
+import ProfileDetailPanel from "../../components/chat/ProfileDetailPanel";
 
 const ChatMyPageContent = ({ embedded }) => {
   const profile_default = PROFILE_DEFAULT;
@@ -84,14 +85,9 @@ const ChatMyPageContent = ({ embedded }) => {
 
   return (
     <div
-      className={`bg-white d-flex flex-column justify-content-center ${
+      className={`d-flex flex-column ${
         embedded ? "h-100 w-100" : "vh-100 mx-auto border-start border-end"
       }`}
-      style={
-        embedded
-          ? { maxWidth: "720px", margin: "0 auto", padding: "32px 0" }
-          : { maxWidth: "480px" }
-      }
     >
       <Modal show={showModal} onHide={() => {
         setShowModal(false);
@@ -127,50 +123,18 @@ const ChatMyPageContent = ({ embedded }) => {
         </Modal.Footer>
       </Modal>
 
-      <div className="px-4 py-4 align-items-center ">
-        <div className="d-flex align-items-center justify-content-between mb-5">
-          <h2 className="fw-bold m-0">마이페이지</h2>
-        </div>
-        <div
-          className="profile-image-wrapper"
-          onClick={() => setShowModal(true)}
-          style={{ cursor: "pointer", position: "relative" }}
-        >
-          <img
-            src={imgSrc}
-            onError={() => setImgSrc(profile_default)}
-            width="150"
-            height="150"
-            style={{ borderRadius: "50%" }}
-          />
-
-          <div className="overlay-hover">
-            사진 변경
-          </div>
-        </div>
-        <ListGroup variant="flush" className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-center border rounded-3 px-4 py-3 mb-3 w-75 shadow-sm"
-          >
-            <span className="fw-bold text-muted">이름</span>
-            <span>{user.name}</span>
-          </ListGroup.Item>
-
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-center border rounded-3 px-4 py-3 mb-3 w-75 shadow-sm"
-          >
-            <span className="fw-bold text-muted">ID</span>
-            <span>{user.loginId}</span>
-          </ListGroup.Item>
-
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-center border rounded-3 px-4 py-3 mb-3 w-75 shadow-sm"
-          >
-            <span className="fw-bold text-muted">전화번호</span>
-            <span>{user.phone}</span>
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
+      <ProfileDetailPanel
+        title="내 프로필"
+        imageSrc={imgSrc}
+        onImageError={() => setImgSrc(profile_default)}
+        onImageClick={() => setShowModal(true)}
+        overlayText="사진 변경"
+        fields={[
+          { label: "이름", value: user.name },
+          { label: "ID", value: user.loginId },
+          { label: "전화번호", value: user.phone },
+        ]}
+      />
       {/* Bottom Navigation*/}
       {!embedded && (
         <div className="mt-auto">

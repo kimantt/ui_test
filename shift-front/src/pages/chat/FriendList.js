@@ -9,11 +9,41 @@ import httpClient from '../../api/httpClient';
 import FriendListContextMenu from "../../components/chat/FriendListContextMenu";
 import MessengerBottomNav from "../../components/chat/MessengerBottomNav";
 import MessengerSidebar from "../../components/chat/MessengerSidebar";
+import { PROFILE_DEFAULT } from "../../utils/chatImages";
+import ProfileDetailPanel from "../../components/chat/ProfileDetailPanel";
 import "../../styles/MessengerLayout.css";
+import "../../styles/ChatMyPage.css";
 
-const FriendListContent = ({ onSelectFriend, embedded }) => {
+const FriendProfileDetail = ({ friend }) => {
+  const [imgSrc, setImgSrc] = useState(
+    `https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${friend.friendId}.png?ts=${Date.now()}`
+  );
+
+  useEffect(() => {
+    setImgSrc(
+      `https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${friend.friendId}.png?ts=${Date.now()}`
+    );
+  }, [friend]);
+
+  return (
+    <ProfileDetailPanel
+      title={`${friend.name}님의 프로필`}
+      imageSrc={imgSrc}
+      onImageError={() => setImgSrc(PROFILE_DEFAULT)}
+      fields={[
+        { label: "이름", value: friend.name },
+        { label: "ID", value: friend.loginId },
+        { label: "전화번호", value: friend.phone },
+      ]}
+    />
+  );
+};
+
+const FriendListContent = ({ onSelectFriend, embedded, onFriendSelect }) => {
   const { stompReady } = useContext(StompContext);
   const navigate = useNavigate();
+
+  const handleFriendSelect = onFriendSelect ?? (() => {});
 
   const menuRef = useRef(null); // 우클릭 메뉴 참조
 
@@ -145,7 +175,7 @@ const FriendListContent = ({ onSelectFriend, embedded }) => {
                   if (onSelectFriend) {
                     onSelectFriend(friend); // 선물하기-> 리시버 선택 모드일 때
                   } else {
-                    //navigate("chat-room"); // 채팅방으로 이동 (데모)
+                    handleFriendSelect(friend); // 친구 프로필 보기
                   }
                 } 
                 else {
@@ -160,12 +190,13 @@ const FriendListContent = ({ onSelectFriend, embedded }) => {
             }
           >
             {/* Profile Icon */}
-            <div
-              className="rounded-circle border border-2 border-dark d-flex align-items-center justify-content-center flex-shrink-0 me-3"
+            <img
+              src={`https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${friend.friendId}.png`}
+              onError={(e) => (e.currentTarget.src = PROFILE_DEFAULT)}
+              alt={`${friend.name} 프로필 사진`}
+              className="rounded-circle border border-2 border-dark flex-shrink-0 me-3"
               style={{ width: "48px", height: "48px" }}
-            >
-              <span className="fw-bold">{friend.name[0]}</span>
-            </div>
+            />
 
             {/* Name */}
             <span className="fw-bold">{friend.name}</span>
@@ -202,6 +233,8 @@ const FriendListContent = ({ onSelectFriend, embedded }) => {
 };
 
 const FriendList = (props) => {
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
   if (props.embedded) {
     return <FriendListContent {...props} embedded />;
   }
@@ -211,13 +244,17 @@ const FriendList = (props) => {
       <MessengerSidebar active="friends" />
 
       <div className="messenger-column list-column">
-        <FriendListContent {...props} embedded />
+        <FriendListContent {...props} embedded onFriendSelect={setSelectedFriend} />
       </div>
 
       <div className="messenger-column detail-column">
-        <div className="messenger-placeholder">
-          채팅방을 선택하면 대화가 이곳에 표시됩니다.
-        </div>
+        {selectedFriend ? (
+          <FriendProfileDetail friend={selectedFriend} />
+        ) : (
+          <div className="messenger-placeholder">
+            친구를 선택하면 프로필이 이곳에 표시됩니다.
+          </div>
+        )}
       </div>
     </div>
   );
