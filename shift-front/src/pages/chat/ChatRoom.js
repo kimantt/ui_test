@@ -41,12 +41,7 @@ const ChatRoom = ({ onViewGift }) => {
   // =====================================================================
   // ★ 수정 1 — receiverId / receiverName을 확실하게 계산
   // =====================================================================
-  const receiverId =
-    roomData?.receiverId ??
-    roomData?.friendId ??
-    roomData?.otherUserId ??
-    roomData?.targetUserId ??
-    null;
+  const receiverId = roomData?.receiverId ?? null;
 
   const cleanChatroomName = (name) =>
   name
@@ -88,6 +83,7 @@ const ChatRoom = ({ onViewGift }) => {
     setReceivedMessages([]);
 
     console.log("사용자 ID:", userId);
+    console.log("상대방 ID:", receiverId);
 
     // 채팅방 구독
     const chatSub = stompClient.subscribe(

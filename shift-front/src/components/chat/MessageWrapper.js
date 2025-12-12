@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { PROFILE_DEFAULT } from "../../utils/chatImages";
 
 // 일반 메시지 UI 포맷
 const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   const isMine = msg.userId === userId;
-  const senderInitial = displayName?.[0]?.toUpperCase() || "?";
+  const [avatarSrc, setAvatarSrc] = useState(`https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${msg.userId}.png`);
 
   const containerStyle = {
     display: "flex",
@@ -20,21 +21,15 @@ const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   };
 
   const avatarStyle = {
-    width: "32px",
-    height: "32px",
+    width: "42px",
+    height: "42px",
     borderRadius: "50%",
-    backgroundColor: "#f0f0f0",
-    color: "#333",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "bold",
     border: "1px solid #ddd",
   };
 
   const nameStyle = {
     fontWeight: "bold",
-    fontSize: "14px",
+    fontSize: "18px",
   };
 
   const messageRowStyle = {
@@ -73,7 +68,12 @@ const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
     <div style={containerStyle}>
       {showSender && !isMine && (
         <div style={senderStyle}>
-          <div style={avatarStyle}>{senderInitial}</div>
+          <img
+            src={avatarSrc}
+            alt={`${displayName} 프로필`}
+            style={avatarStyle}
+            onError={() => setAvatarSrc(PROFILE_DEFAULT)}
+          />
           <span style={nameStyle}>{displayName}</span>
         </div>
       )}
