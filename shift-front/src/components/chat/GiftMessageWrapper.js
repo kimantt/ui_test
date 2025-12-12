@@ -22,15 +22,16 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
     const parts = content.split("&");
     return parts.length >= 3 ? parts[parts.length - 1] : null;
   };
+  const giftType = extractGiftType(msg.content);
 
   const handleClick = () => {
     if (isMine) {
       navigate(`/orders/${extractedId}`, {
-        state: { giftType: extractGiftType(msg.content) }
+        state: { giftType }
       }); // 주문 상세
     } else {
       navigate(`/gifts/${extractedId}`, {
-        state: { giftType: extractGiftType(msg.content) }
+        state: { giftType }
       });  // 선물함
     }
   };
@@ -38,10 +39,26 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   // 주문번호 제거된 메시지 추출
   const getDisplayContent = (content) => {
     const parts = content.split("&");
-    if (parts.length >= 3) {
-      return parts.slice(0, parts.length - 2).join("&").trim();
+    const baseMessage =
+      parts.length >= 3 ? parts.slice(0, parts.length - 2).join("&").trim() : content;
+    const baseMessageLines = baseMessage.split("\n");
+    const amountText = baseMessageLines.slice(1).join("\n").trim();
+
+    const giftLabel = giftType === "POINT" ? "금액권 선물" : "선물";
+    const giftIcon = giftType === "POINT" ? "💳" : "🎁";
+
+    if (giftType) {
+      const particle = isMine ? "을" : "이";
+      const verb = isMine ? "보냈습니다." : "도착했습니다!";
+      const lines = [`${giftIcon} ${giftLabel}${particle} ${verb}`];
+
+      if (giftType === "POINT" && amountText) {
+        lines.push(amountText);
+      }
+
+      return lines.join("\n");
     }
-    return content; // 메시지 형식이 다를 경우 그대로 반환
+    return baseMessage; // 메시지 형식이 다를 경우 그대로 반환
   };
 
   const getButtonStyle = () => {
@@ -65,7 +82,7 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: isMine ? "flex-end" : "flex-start",
     gap: "6px",
     marginBottom: "5px",
   };
@@ -99,6 +116,7 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
     alignItems: "flex-end",
     gap: "8px",
     maxWidth: "75%",
+    flexDirection: isMine ? "row-reverse" : "row",
   };
 
   const badgeStyle = {
@@ -113,7 +131,7 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
 
   return (
     <div style={containerStyle}>
-      {showSender && (
+      {showSender && !isMine && (
         <div style={senderStyle}>
           <div style={avatarStyle}>{senderInitial}</div>
           <span style={nameStyle}>{displayName}</span>
@@ -130,6 +148,18 @@ const GiftMessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
             textAlign: "center",
           }}
         >
+          <img
+            src="https://shift-main-images.s3.ap-northeast-3.amazonaws.com/gift_message.png"
+            alt="Gift"
+            style={{
+              width: "100%",
+              aspectRatio: "3 / 2",
+              objectFit: "cover",
+              borderRadius: "8px",
+              marginBottom: "10px",
+            }}
+          />
+
           <p className="small text-muted mb-2" style={{ whiteSpace: "pre-line" }}>
             {getDisplayContent(msg.content)}
           </p>

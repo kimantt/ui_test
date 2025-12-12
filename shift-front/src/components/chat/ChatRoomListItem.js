@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { PROFILE_DEFAULT } from "../../utils/chatImages";
 
 const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent, onSelect }) => {
   const navigate = useNavigate();
@@ -13,15 +14,26 @@ const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent
       ?.replace(/와의 채팅방$/, "")
       ?.trim();
 
-  const receiverId =
-    room.friendId ??
-    room.targetUserId ??
-    null;
+  const receiverId = room.receiverId ?? null;
 
   const receiverName =
     room.friendName ??
     cleanName(room.chatroomName) ??
     "선물받는 친구";
+
+  const [avatarSrc, setAvatarSrc] = useState(null);
+
+  useEffect(() => {
+    setAvatarSrc(
+      `https://shift-main-images.s3.ap-northeast-3.amazonaws.com/user_profile/${receiverId}.png`
+    );
+  }, [receiverId]);
+
+  const displayContent = getDisplayContent(room.lastMsgContent, room.lastMsgSender);
+  const truncatedContent =
+    displayContent.length > 20
+      ? displayContent.slice(0, 17) + "..."
+      : displayContent;
 
   return (
     <ListGroup.Item
@@ -58,9 +70,16 @@ const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
+          overflow: "hidden",
+          backgroundColor: "#f1f1f1",
         }}
       >
-        <span className="fw-bold">{room.chatroomName[0]}</span>
+        <img
+          src={avatarSrc}
+          alt={`${receiverName} 프로필 사진`}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          onError={() => setAvatarSrc(PROFILE_DEFAULT)}
+        />
       </div>
 
       {/* Chat Info */}
@@ -77,14 +96,12 @@ const ChatRoomListItem = ({ room, menuRef, formatLastChatDate, getDisplayContent
 
         <div className="d-flex justify-content-between align-items-center mt-1 position-relative">
           {/* 메시지 내용 */}
-          {(room.lastMsgContent || room.message) ? (
+          {room.lastMsgContent ? (
             <div
               className="text-muted text-truncate small"
               style={{ maxWidth: "70%" }}
             >
-              {getDisplayContent(room.lastMsgContent || room.message).length > 20
-                ? getDisplayContent(room.lastMsgContent || room.message).slice(0, 17) + "..."
-                : getDisplayContent(room.lastMsgContent || room.message)}
+              {truncatedContent}
             </div>
           ) : (
             <div style={{ maxWidth: "70%" }}></div>

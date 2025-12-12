@@ -8,7 +8,7 @@ const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: isMine ? "flex-end" : "flex-start",
     gap: "6px",
     marginBottom: "3px",
   };
@@ -42,6 +42,7 @@ const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
     alignItems: "flex-end",
     gap: "8px",
     maxWidth: "75%",
+    flexDirection: isMine ? "row-reverse" : "row",
   };
 
   const bubbleStyle = {
@@ -65,11 +66,12 @@ const MessageWrapper = ({ msg, userId, time, showSender, displayName }) => {
   const timeStyle = {
     color: "#6c757d",
     fontSize: "12px",
+    alignSelf: isMine ? "flex-end" : "flex-start",
   };
 
   return (
     <div style={containerStyle}>
-      {showSender && (
+      {showSender && !isMine && (
         <div style={senderStyle}>
           <div style={avatarStyle}>{senderInitial}</div>
           <span style={nameStyle}>{displayName}</span>

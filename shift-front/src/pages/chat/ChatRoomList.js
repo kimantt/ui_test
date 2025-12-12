@@ -24,6 +24,8 @@ const ChatRoomListContent = ({ embedded }) => {
   const { stompReady } = useContext(StompContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const userId = accessToken ? Number(jwtDecode(accessToken).sub) : null;
 
   const [rooms, setRooms] = useState([]); // 채팅방 목록
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색어
@@ -33,7 +35,6 @@ const ChatRoomListContent = ({ embedded }) => {
   const [searchNameResults, setSearchNameResults] = useState([]); // 사용자 이름 검색 결과
   const [searchMessageResults, setSearchMessageResults] = useState([]); // 메시지 검색 결과
   const [isComposing, setIsComposing] = useState(false);  // 한글 입력 중 상태
-
 
   // 채팅방 목록 가져오기
   const getChatRoomList = async () => {
@@ -50,12 +51,32 @@ const ChatRoomListContent = ({ embedded }) => {
   };
 
   // 주문번호 제거된 메시지 추출
-  const getDisplayContent = (content) => {
+  const getDisplayContent = (content, senderId) => {
+    if (!content) return "";
+
     const parts = content.split("&");
-    if (parts.length >= 3) {
-      return parts.slice(0, parts.length - 2).join("&").trim();
+    const baseMessage =
+      parts.length >= 3 ? parts.slice(0, parts.length - 2).join("&").trim() : content;
+    const baseMessageLines = baseMessage.split("\n");
+    const amountText = baseMessageLines.slice(1).join("\n").trim();
+    const giftType = parts.length >= 3 ? parts[parts.length - 1] : null;
+
+    if (giftType) {
+      const giftLabel = giftType === "POINT" ? "금액권 선물" : "선물";
+      const giftIcon = giftType === "POINT" ? "💳" : "🎁";
+      const isMine =
+        userId != null && senderId != null && Number(senderId) === Number(userId);
+      const particle = isMine ? "을" : "이";
+      const verb = isMine ? "보냈습니다." : "도착했습니다!";
+      const lines = [`${giftIcon} ${giftLabel}${particle} ${verb}`];
+
+      if (giftType === "POINT" && amountText) {
+        lines.push(amountText);
+      }
+
+      return lines.join("\n");
     }
-    return content; // 메시지 형식이 다를 경우 그대로 반환
+    return baseMessage; // 메시지 형식이 다를 경우 그대로 반환
   };
 
   // 마지막 채팅 날짜 포맷팅
@@ -96,15 +117,13 @@ const ChatRoomListContent = ({ embedded }) => {
     return dateB - dateA;
   });
 
-  const accessToken = useSelector((state) => state.auth.accessToken);
   // 페이지 진입 시 실행
   useEffect(() => {
     if (!stompReady) return; // 연결 체크
     if (!accessToken) return; // 토큰 유무 체크
 
-    const userId = accessToken ? jwtDecode(accessToken).sub : null;
     getChatRoomList(userId);
-  }, [stompReady]);
+  }, [stompReady, accessToken]);
 
   // CHATROOM_UPDATED 이벤트 수신 시 해당 채팅방 정보 갱신
   useEffect(() => {
